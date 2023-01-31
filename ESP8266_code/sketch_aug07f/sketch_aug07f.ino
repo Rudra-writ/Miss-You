@@ -19,11 +19,12 @@ void setup()
 
  Serial.begin(9600);
  pinMode(D7,OUTPUT);
-  pinMode(D6,OUTPUT);
-   pinMode(D5,OUTPUT);
-    pinMode(D4,OUTPUT);
-     pinMode(D3,OUTPUT);
-      pinMode(D1,OUTPUT);
+ pinMode(D6,OUTPUT);
+ pinMode(D5,OUTPUT);
+ pinMode(D4,OUTPUT);
+ pinMode(D3,OUTPUT);
+ pinMode(D1,OUTPUT);
+ pinMode(D8, INPUT);
 
  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
  Serial.print("connecting");
@@ -42,7 +43,8 @@ void setup()
  
 void loop()
 {
-String value_1 = Firebase.getString("person1");
+//read the status of each notifier from the data base and take corresponding action
+String value_1 = Firebase.getString("person1"); 
 String value_2 = Firebase.getString("person2");
 String value_3 = Firebase.getString("person3");
 String value_4 = Firebase.getString("person4");
@@ -65,10 +67,6 @@ if (value_1 == "" )
   digitalWrite(D7,LOW);
   
 }
-
-
-
-
 if(value_2 == "1") 
 {
   digitalWrite(D6,HIGH);
@@ -151,8 +149,16 @@ if (value_6 == "" )
   digitalWrite(D1,LOW);
   
 }
-
-
+if(digitalRead(d8) == LOW) //If the adressee presses a button reset all the lights
+{
+Firebase.setString("person1", "0");
+Firebase.setString("person2", "0");
+Firebase.setString("person3", "0");
+Firebase.setString("person4", "0");
+Firebase.setString("person5", "0");
+Firebase.setString("person6", "0");
+ 
+}
 
 delay(2000);
 if (WiFi.status() != WL_CONNECTED)
